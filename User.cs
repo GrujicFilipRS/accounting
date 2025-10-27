@@ -31,7 +31,6 @@ namespace Accounting
             return false;
         }
 
-        // Returns negative status if an error is given
         public static string Register(string username, string password, string fullName)
         {
             if (InvalidParams(username, password, fullName))
