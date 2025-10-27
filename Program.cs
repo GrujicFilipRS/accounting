@@ -1,12 +1,15 @@
-﻿using System;
-
-namespace Accounting
+﻿namespace Accounting
 {
     class Entrypoint
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World");
+            string username = "ficfiric";
+            string password = "test123";
+            string fullName = "Filip Grujic";
+
+            User user = new User(username, password, fullName);
+            user.PrintUser();
         }
     }
 }
