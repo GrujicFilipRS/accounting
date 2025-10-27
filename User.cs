@@ -1,9 +1,11 @@
+using BCrypt.Net;
+
 namespace Accounting
 {
     class User
     {
         private static int workFactor = 8; // Number of iterations of the BCrypt algorithm
-        public static string HashPassword(string password)
+        private static string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.EnhancedHashPassword(password, workFactor);
         }
@@ -26,12 +28,9 @@ namespace Accounting
             users.Add(this);
         }
 
-        public void PrintUser()
+        public bool ComparePassword(string password)
         {
-            Console.WriteLine($"ID: {id}");
-            Console.WriteLine($"Username: {username}");
-            Console.WriteLine($"Hashed pwd: {hashedPassword}");
-            Console.WriteLine($"Full name: {fullName}");
+            return BCrypt.Net.BCrypt.EnhancedVerify(password, hashedPassword);
         }
     }
 }

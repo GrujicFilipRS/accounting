@@ -9,7 +9,7 @@
             string fullName = "Filip Grujic";
 
             User user = new User(username, password, fullName);
-            user.PrintUser();
+            Console.WriteLine(user.ComparePassword("test1234"));
         }
     }
 }
