@@ -26,7 +26,7 @@ namespace Accounting
             savingsAccount.ApplyInterest();
         }
 
-        private const double INTEREST_PERCENTAGE = 50; // per minute, for testing purposes
+        private const double INTEREST_PERCENTAGE = 5; // per minute, for testing purposes
         private DateTime lastInterestPayment;
 
         public SavingsAccount(User owner) : base(owner, "SAVINGS")
@@ -37,19 +37,19 @@ namespace Accounting
         private void ApplyInterest()
         {
             TimeSpan timeElapsed = DateTime.Now - lastInterestPayment;
-            double hoursPassed = timeElapsed.TotalMinutes;
-            Console.WriteLine(hoursPassed);
+            double minutesPassed = timeElapsed.TotalMinutes;
+            Console.WriteLine(minutesPassed);
 
-            if (hoursPassed < 1)
+            if (minutesPassed < 1)
                 return;
 
             const double RATE = INTEREST_PERCENTAGE / 100.0;
 
-            double multiplier = Math.Pow(1 + RATE, Math.Floor(hoursPassed));
+            double multiplier = Math.Pow(1 + RATE, Math.Floor(minutesPassed));
 
             balance *= multiplier;
 
-            lastInterestPayment = lastInterestPayment.AddHours(Math.Floor(hoursPassed));
+            lastInterestPayment = lastInterestPayment.AddHours(Math.Floor(minutesPassed));
         }
     }
 }
