@@ -10,8 +10,11 @@ namespace Accounting
 
             string sessionId = User.Register(username, password, fullName);
 
-            string addr = CheckingAccount.CreateAccount(sessionId);
+            string addr = SavingsAccount.CreateAccount(sessionId);
             Account.Deposit(sessionId, addr, 1000.0);
+            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addr));
+            Thread.Sleep(61000);
+            SavingsAccount.ApplyInterest(sessionId, addr);
             Console.WriteLine(Account.GetBalanceFormatted(sessionId, addr));
         }
     }
