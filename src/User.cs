@@ -2,7 +2,7 @@ namespace Accounting
 {
     class User
     {
-        public static List<User> users = new List<User>();
+        private static List<User> users = new List<User>();
 
         private static string Hash(string password)
         {
