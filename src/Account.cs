@@ -14,10 +14,14 @@ namespace Accounting
         private double balance;
         private User owner;
 
-        // public Account(User owner)
-        // {
-        //     accountID = accounts.Count() + 1;
-        //     // accountAddress = 
-        // }
+        public Account(User owner)
+        {
+            accountID = accounts.Count() + 1;
+            accountAddress = HexHash(accountId);
+            balance = 0.0;
+            this.owner = owner;
+
+            accounts.Add(this);
+        }
     }
 }
