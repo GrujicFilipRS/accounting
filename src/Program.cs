@@ -8,8 +8,8 @@
             string password = "test123";
             string fullName = "Filip Grujic";
 
-            User user = new User(username, password, fullName);
-            Console.WriteLine(user.ComparePassword("test1234"));
+            string sessionId = User.Register(username, password, fullName);
+            sessionId = User.Login(username, password);
         }
     }
 }

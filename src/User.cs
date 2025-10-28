@@ -55,10 +55,15 @@ namespace Accounting
             return foundUser.sessionId;
         }
 
-        // private static User VerifySession(string sessionId)
-        // {
-        //     return users.Where(user => user.)
-        // }
+        private static User? VerifySession(string sessionId)
+        {
+            IEnumerable<User> possibleUsers = users.Where(user => user.sessionId == sessionId);
+            if (possibleUsers.Count() == 0)
+                return null;
+
+            User foundUser = possibleUsers.First();
+            return foundUser;
+        }
 
         private int id;
         private string sessionId; // Used for handling actions taken by user
