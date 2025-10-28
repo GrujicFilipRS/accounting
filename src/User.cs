@@ -44,10 +44,19 @@ namespace Accounting
             return newUser.sessionId;
         }
 
+        public static string Login(string username, string password)
+        {
+            User user = users.Where(user => user.username == username && user.ComparePassword(password)).First();
+            if (user is null)
+                throw new Exception("Invalid credentials");
+
+            return user.sessionId;
+        }
+
         private int id;
         private string sessionId; // Used for handling actions taken by user
         private string username, hashedPassword;
-        public string fullName;
+        private string fullName;
 
         public User(string username, string password, string fullName)
         {
