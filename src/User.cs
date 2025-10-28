@@ -55,7 +55,7 @@ namespace Accounting
             return foundUser.sessionId;
         }
 
-        private static User? VerifySession(string sessionId)
+        public static User? VerifySession(string sessionId)
         {
             IEnumerable<User> possibleUsers = users.Where(user => user.sessionId == sessionId);
             if (possibleUsers.Count() == 0)

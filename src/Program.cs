@@ -9,7 +9,10 @@
             string fullName = "Filip Grujic";
 
             string sessionId = User.Register(username, password, fullName);
-            sessionId = User.Login(username, password);
+
+            string addr = Account.CreateAccount(sessionId);
+            Account.Deposit(sessionId, addr, 1000.0);
+            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addr));
         }
     }
 }
