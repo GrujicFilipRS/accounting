@@ -46,12 +46,19 @@ namespace Accounting
 
         public static string Login(string username, string password)
         {
-            User user = users.Where(user => user.username == username && user.ComparePassword(password)).First();
-            if (user is null)
+            IEnumerable<User> possibleUsers = users.Where(user => user.username == username && user.ComparePassword(password));
+            if (possibleUsers.Count() == 0)
                 throw new Exception("Invalid credentials");
 
-            return user.sessionId;
+            User foundUser = possibleUsers.First();
+
+            return foundUser.sessionId;
         }
+
+        // private static User VerifySession(string sessionId)
+        // {
+        //     return users.Where(user => user.)
+        // }
 
         private int id;
         private string sessionId; // Used for handling actions taken by user
