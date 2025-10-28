@@ -5,9 +5,9 @@ namespace Accounting
 {
     class Account
     {
-        private static List<Account> accounts = new List<Account>();
+        protected static List<Account> accounts = new List<Account>();
 
-        private static string HexHash(int id)
+        protected static string HexHash(int id)
         {
             const int ADDRESS_LENGTH = 24;
             string dataToEncode = id.ToString();
@@ -27,25 +27,9 @@ namespace Accounting
             }
         }
 
-        public static string CreateAccount(string sessionId)
+        protected static Account? GetAccountByAddress(string address)
         {
-            User? user = User.VerifySession(sessionId);
-            if (user is null)
-                throw new Exception("Session invalid");
-
-            Account account = new Account(user);
-
-            return account.address;
-        }
-
-        private static Account? GetAccountByAddress(string address)
-        {
-            IEnumerable<Account> possibleAccounts = accounts.Where(acc => acc.address == address);
-            if (possibleAccounts.Count() == 0)
-                return null;
-
-            Account acc = possibleAccounts.First();
-            return acc;
+            return accounts.SingleOrDefault(acc => acc.address == address);
         }
 
         public static string GetBalanceFormatted(string sessionId, string address)
@@ -66,18 +50,20 @@ namespace Accounting
             acc.Deposit(sessionId, amount);
         }
 
-        private int id;
-        private string address;
-        private double balance;
-        private const string currency = "EUR";
-        private User owner;
+        protected int id;
+        protected string address;
+        protected double balance;
+        protected const string currency = "EUR";
+        protected User owner;
+        protected string accountType;
 
-        public Account(User owner)
+        public Account(User owner, string accountType)
         {
             id = accounts.Count() + 1;
             address = HexHash(id);
             balance = 0.0;
             this.owner = owner;
+            this.accountType = accountType;
 
             accounts.Add(this);
         }
