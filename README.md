@@ -21,4 +21,5 @@ Then he will be able to use both of these accounts like a regular bank account
 ## How to build and run
 
 You're going to need dotnet (this one is configured for version 9)
+
 You just clone the repository, and do `dotnet build` and then `dotnet run` to run the project
