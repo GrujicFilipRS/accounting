@@ -46,8 +46,19 @@ namespace Accounting
             Account? acc = GetAccountByAddress(address);
             if (acc is null)
                 throw new Exception("Account with such address doesn't exist");
-            
+
             acc.Deposit(sessionId, amount);
+        }
+        
+        public static bool IsOwner(string sessionId, string address)
+        {
+            User? user = User.VerifySession(sessionId);
+
+            Account? account = Account.GetAccountByAddress(address);
+            if (account is null)
+                throw new Exception("Account nonexistent");
+
+            return user == account.owner;
         }
 
         protected int id;

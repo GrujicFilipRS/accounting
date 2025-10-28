@@ -83,7 +83,7 @@ namespace Accounting
             users.Add(this);
         }
 
-        public bool ComparePassword(string password)
+        private bool ComparePassword(string password)
         {
             return BCrypt.Net.BCrypt.EnhancedVerify(password, hashedPassword);
         }
