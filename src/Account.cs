@@ -49,6 +49,15 @@ namespace Accounting
 
             acc.Deposit(sessionId, amount);
         }
+
+        public static void Withdraw(string sessionId, string address, double amount)
+        {
+            Account? acc = GetAccountByAddress(address);
+            if (acc is null)
+                throw new Exception("Account with such address doesn't exist");
+
+            acc.Withdraw(sessionId, amount);
+        }
         
         public static bool IsOwner(string sessionId, string address)
         {
@@ -62,7 +71,7 @@ namespace Accounting
         }
 
         protected int id;
-        protected string address;
+        public string address;
         protected double balance;
         protected const string currency = "EUR";
         protected User owner;
@@ -88,6 +97,15 @@ namespace Accounting
             return CurrencyFormatter.Format(balance, currency);
         }
 
+        public bool IsType(string type, string sessionId)
+        {
+            User? user = User.VerifySession(sessionId);
+            if (user != owner)
+                return false;
+
+            return accountType == type;
+        }
+
         private void Deposit(string sessionId, double amount)
         {
             const double MIN_DEPOSIT = 5.0;
@@ -100,6 +118,20 @@ namespace Accounting
                 throw new Exception("Invalid deposit amount");
 
             balance += amount;
+        }
+
+        private void Withdraw(string sessionId, double amount)
+        {
+            const double MIN_WITHDRAW = 5.0;
+
+            User? user = User.VerifySession(sessionId);
+            if (user != owner)
+                throw new Exception("No authorization");
+
+            if (amount < MIN_WITHDRAW || amount > balance)
+                throw new Exception("Invalid withdraw amount");
+
+            balance -= amount;
         }
     }
 }
