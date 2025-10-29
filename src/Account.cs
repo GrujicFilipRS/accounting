@@ -63,7 +63,7 @@ namespace Accounting
         {
             User? user = User.VerifySession(sessionId);
 
-            Account? account = Account.GetAccountByAddress(address);
+            Account? account = GetAccountByAddress(address);
             if (account is null)
                 throw new Exception("Account nonexistent");
 
