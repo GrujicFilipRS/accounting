@@ -12,16 +12,16 @@ namespace Accounting
 
             string sessionId = User.Register(username, password, fullName);
 
-            string addr = SavingsAccount.CreateAccount(sessionId);
+            string addrChecking = CheckingAccount.CreateAccount(sessionId);
 
-            Account.Deposit(sessionId, addr, 1000.0);
+            Account.Deposit(sessionId, addrChecking, 1000.0);
 
-            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addr));
-            Thread.Sleep(61000);
+            string addrSavings = SavingsAccount.CreateAccount(sessionId);
 
-            SavingsAccount.ApplyInterest(sessionId, addr);
-
-            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addr));
+            Account.Deposit(sessionId, addrSavings, 1000.0);
+            SavingsAccount.WithdrawToChecking(sessionId, addrSavings, 500.0);
+            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addrChecking));
+            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addrSavings));
         }
         
         public static void Setup()

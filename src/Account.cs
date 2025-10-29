@@ -58,7 +58,7 @@ namespace Accounting
 
             acc.Withdraw(sessionId, amount);
         }
-        
+
         public static bool IsOwner(string sessionId, string address)
         {
             User? user = User.VerifySession(sessionId);
@@ -68,6 +68,15 @@ namespace Accounting
                 throw new Exception("Account nonexistent");
 
             return user == account.owner;
+        }
+        
+        public static double GetBalance(string sessionId, string address)
+        {
+            Account? acc = GetAccountByAddress(address);
+            if (acc is null)
+                throw new Exception("Account with such address doesn't exist");
+
+            return acc.GetBalance(sessionId);
         }
 
         protected int id;
@@ -95,6 +104,15 @@ namespace Accounting
                 throw new Exception("No authorization");
 
             return CurrencyFormatter.Format(balance, currency);
+        }
+
+        private double GetBalance(string sessionId)
+        {
+            User? user = User.VerifySession(sessionId);
+            if (user != owner)
+                throw new Exception("No authorization");
+
+            return balance;
         }
 
         public bool IsType(string type, string sessionId)

@@ -33,7 +33,7 @@ namespace Accounting
 
             if (!IsOwner(sessionId, address))
                 throw new Exception("User isn't account owner");
-            
+
             Account account = GetAccountByAddress(address)!;
             if (!(account is SavingsAccount savingsAccount))
                 throw new Exception("Attempted to withdraw to checkings from a non-savings account");
@@ -44,7 +44,7 @@ namespace Accounting
             if (amount > savingsAccount.balance)
                 throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than savings account balance");
 
-            Account? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING", sessionId) && IsOwner(sessionId, acc.address));
+            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING", sessionId) && IsOwner(sessionId, acc.address)) as CheckingAccount;
 
             if (checkingAccount is null)
                 throw new Exception("User doesn't have checkings account");
@@ -53,6 +53,34 @@ namespace Accounting
 
             Deposit(sessionId, checkingAddr, amount);
             Withdraw(sessionId, address, amount);
+        }
+        
+        public static void DepositFromChecking(string sessionId, string address, double amount)
+        {
+            const double MIN_DEPOSIT_FROM_CHECKING = 5.0;
+
+            if (!IsOwner(sessionId, address))
+                throw new Exception("User isn't account owner");
+            
+            Account account = GetAccountByAddress(address)!;
+            if (!(account is SavingsAccount savingsAccount))
+                throw new Exception("Attempted to deposit from checkings to a non-savings account");
+
+            if (amount < MIN_DEPOSIT_FROM_CHECKING)
+                throw new Exception($"The minimum amount to withdraw to checking is {MIN_DEPOSIT_FROM_CHECKING}. You submitted {amount}");
+
+            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING", sessionId) && IsOwner(sessionId, acc.address)) as CheckingAccount;
+
+            if (checkingAccount is null)
+                throw new Exception("User doesn't have checkings account");
+            
+            if (amount > GetBalance(sessionId, address))
+                throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than checking account balance");
+
+            string checkingAddr = checkingAccount.address;
+
+            Withdraw(sessionId, checkingAddr, amount);
+            Deposit(sessionId, address, amount);
         }
 
         private const double INTEREST_PERCENTAGE = 5; // per minute, for testing purposes
