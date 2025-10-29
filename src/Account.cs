@@ -27,6 +27,15 @@ namespace Accounting
             }
         }
 
+        protected static Account GetAccount(string address)
+        {
+            Account? acc = GetAccountByAddress(address);
+            if (acc is null)
+                throw new Exception("Account with such address doesn't exist");
+
+            return acc;
+        }
+
         protected static Account? GetAccountByAddress(string address)
         {
             return accounts.SingleOrDefault(acc => acc.address == address);
@@ -34,49 +43,29 @@ namespace Accounting
 
         public static string GetBalanceFormatted(string sessionId, string address)
         {
-            Account? acc = GetAccountByAddress(address);
-            if (acc is null)
-                throw new Exception("Account with such address doesn't exist");
-
-            return acc.FormatBalance(sessionId);
+            return GetAccount(address).FormatBalance(sessionId);
         }
 
         public static void Deposit(string sessionId, string address, double amount)
         {
-            Account? acc = GetAccountByAddress(address);
-            if (acc is null)
-                throw new Exception("Account with such address doesn't exist");
-
-            acc.Deposit(sessionId, amount);
+            GetAccount(address).Deposit(sessionId, amount);
         }
 
         public static void Withdraw(string sessionId, string address, double amount)
         {
-            Account? acc = GetAccountByAddress(address);
-            if (acc is null)
-                throw new Exception("Account with such address doesn't exist");
-
-            acc.Withdraw(sessionId, amount);
+            GetAccount(address).Withdraw(sessionId, amount);
         }
 
         public static bool IsOwner(string sessionId, string address)
         {
             User? user = User.VerifySession(sessionId);
 
-            Account? account = GetAccountByAddress(address);
-            if (account is null)
-                throw new Exception("Account nonexistent");
-
-            return user == account.owner;
+            return user == GetAccount(address).owner;
         }
         
         public static double GetBalance(string sessionId, string address)
         {
-            Account? acc = GetAccountByAddress(address);
-            if (acc is null)
-                throw new Exception("Account with such address doesn't exist");
-
-            return acc.GetBalance(sessionId);
+            return GetAccount(address).GetBalance(sessionId);
         }
 
         protected int id;
