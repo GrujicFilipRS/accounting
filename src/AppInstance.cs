@@ -4,24 +4,22 @@ namespace Accounting
     {
         public static void Run()
         {
-            Setup();
+            string acc1Sess = User.Register("fgrujic1", "CofiMafija123", "Filip Grujic");
+            string acc2Sess = User.Register("fgrujic2", "CofiMafija123", "Filip Grujic");
 
-            string username = "ficfiric";
-            string password = "test123";
-            string fullName = "Filip Grujic";
+            string addr1 = CheckingAccount.CreateAccount(acc1Sess);
+            Account.Deposit(acc1Sess, addr1, 1000.0);
 
-            string sessionId = User.Register(username, password, fullName);
+            string addr2 = CheckingAccount.CreateAccount(acc2Sess);
 
-            string addrChecking = CheckingAccount.CreateAccount(sessionId);
+            Console.WriteLine(Account.GetBalanceFormatted(acc1Sess, addr1));
+            Console.WriteLine(Account.GetBalanceFormatted(acc2Sess, addr2));
+            Console.WriteLine();
 
-            Account.Deposit(sessionId, addrChecking, 1000.0);
+            CheckingAccount.Transfer(acc1Sess, addr1, addr2, 250.0);
 
-            string addrSavings = SavingsAccount.CreateAccount(sessionId);
-
-            Account.Deposit(sessionId, addrSavings, 1000.0);
-            SavingsAccount.WithdrawToChecking(sessionId, addrSavings, 500.0);
-            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addrChecking));
-            Console.WriteLine(Account.GetBalanceFormatted(sessionId, addrSavings));
+            Console.WriteLine(Account.GetBalanceFormatted(acc1Sess, addr1));
+            Console.WriteLine(Account.GetBalanceFormatted(acc2Sess, addr2));
         }
         
         public static void Setup()

@@ -62,10 +62,20 @@ namespace Accounting
 
             return user == GetAccount(address).owner;
         }
-        
+
         public static double GetBalance(string sessionId, string address)
         {
             return GetAccount(address).GetBalance(sessionId);
+        }
+
+        public static bool IsType(string address, string type)
+        {
+            return GetAccount(address).IsType(type);
+        }
+        
+        protected static void DepositTo(string address, double amount)
+        {
+            GetAccount(address).balance += amount;
         }
 
         protected int id;
@@ -104,12 +114,8 @@ namespace Accounting
             return balance;
         }
 
-        public bool IsType(string type, string sessionId)
+        public bool IsType(string type)
         {
-            User? user = User.VerifySession(sessionId);
-            if (user != owner)
-                return false;
-
             return accountType == type;
         }
 

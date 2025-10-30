@@ -44,7 +44,7 @@ namespace Accounting
             if (amount > savingsAccount.balance)
                 throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than savings account balance");
 
-            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING", sessionId) && IsOwner(sessionId, acc.address)) as CheckingAccount;
+            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING") && IsOwner(sessionId, acc.address)) as CheckingAccount;
 
             if (checkingAccount is null)
                 throw new Exception("User doesn't have checkings account");
@@ -69,7 +69,7 @@ namespace Accounting
             if (amount < MIN_DEPOSIT_FROM_CHECKING)
                 throw new Exception($"The minimum amount to withdraw to checking is {MIN_DEPOSIT_FROM_CHECKING}. You submitted {amount}");
 
-            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING", sessionId) && IsOwner(sessionId, acc.address)) as CheckingAccount;
+            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING") && IsOwner(sessionId, acc.address)) as CheckingAccount;
 
             if (checkingAccount is null)
                 throw new Exception("User doesn't have checkings account");
