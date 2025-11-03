@@ -146,4 +146,15 @@ class DatabaseHandler
 
         using MySqlDataReader reader = cmd.ExecuteReader();
     }
+
+    public static void ChangeBalance(string address, double balance)
+    {
+        using MySqlConnection connection = new(connectionString);
+        connection.Open();
+
+        string query = "UPDATE accounts SET balance = @balance WHERE address = @address;";
+        using MySqlCommand cmd = new(query, connection);
+        cmd.Parameters.AddWithValue("@address", address);
+        cmd.Parameters.AddWithValue("@balance", balance);
+    }
 }

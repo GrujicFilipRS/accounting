@@ -59,6 +59,7 @@ class Account
     public static void Withdraw(string sessionId, string address, double amount)
     {
         GetAccount(address).Withdraw(sessionId, amount);
+        DatabaseHandler.ChangeBalance(address, GetAccount(address).balance);
     }
 
     public static bool IsOwner(string sessionId, string address)
@@ -81,6 +82,7 @@ class Account
     protected static void DepositTo(string address, double amount)
     {
         GetAccount(address).balance += amount;
+        DatabaseHandler.ChangeBalance(address, GetAccount(address).balance);
     }
 
     protected int id;
