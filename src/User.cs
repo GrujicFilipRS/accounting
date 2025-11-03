@@ -70,9 +70,24 @@ class User
     private string username, hashedPassword;
     private string fullName;
 
+    // Used for loading in from db
+    public User(int id, string username, string hashedPassword, string fullName)
+    {
+        this.id = id;
+        this.username = username;
+        this.hashedPassword = hashedPassword;
+        this.fullName = fullName;
+
+        sessionId = Hash(id.ToString());
+        users.Add(this);
+    }
+
     public User(string username, string password, string fullName)
     {
-        id = users.Count + 1;
+        try { id = users.Last().id + 1; }
+        catch (ArgumentNullException) { id = 1; }
+        catch (InvalidOperationException) { id = 1; }
+        
         sessionId = Hash(id.ToString());
         this.username = username;
         this.fullName = fullName;
