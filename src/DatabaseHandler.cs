@@ -132,4 +132,18 @@ class DatabaseHandler
 
         return accounts;
     }
+
+    public static void InterestApplication(int id, double newBalance, DateTime lastInterestPayment)
+    {
+        using MySqlConnection connection = new(connectionString);
+        connection.Open();
+
+        string query = "UPDATE accounts SET balance = @balance, lastInterestPayment = @lastInterestPayment WHERE id = @id;";
+        using MySqlCommand cmd = new(query, connection);
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@balance", newBalance);
+        cmd.Parameters.AddWithValue("@lastInterestPayment", lastInterestPayment);
+
+        using MySqlDataReader reader = cmd.ExecuteReader();
+    }
 }

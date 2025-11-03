@@ -6,7 +6,9 @@ class Application
 {
     public static void Run()
     {
-        
+        string session = User.Login("fgrujic3", "CofiMafija123");
+        string address = "6b86b273ff34fce19d6b804e";
+        SavingsAccount.ApplyInterest(session, address);
     }
 
     public static void Setup()

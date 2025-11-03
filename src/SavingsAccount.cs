@@ -87,6 +87,7 @@ class SavingsAccount : Account
     public SavingsAccount(User owner) : base(owner, "SAVINGS")
     {
         lastInterestPayment = DateTime.Now;
+        DatabaseHandler.SaveAccount(id, address, balance, owner.id, "SAVINGS", lastInterestPayment);
     }
 
     public SavingsAccount(int id, string address, double balance, int ownerId, DateTime lastInterestPayment)
@@ -99,7 +100,6 @@ class SavingsAccount : Account
     {
         TimeSpan timeElapsed = DateTime.Now - lastInterestPayment;
         double minutesPassed = timeElapsed.TotalMinutes;
-        Console.WriteLine(minutesPassed);
 
         if (minutesPassed < 1)
             return;
@@ -111,5 +111,7 @@ class SavingsAccount : Account
         balance *= multiplier;
 
         lastInterestPayment = lastInterestPayment.AddHours(Math.Floor(minutesPassed));
+
+        DatabaseHandler.InterestApplication(id, balance, lastInterestPayment);
     }
 }
