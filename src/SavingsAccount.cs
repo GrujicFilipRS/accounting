@@ -89,6 +89,12 @@ class SavingsAccount : Account
         lastInterestPayment = DateTime.Now;
     }
 
+    public SavingsAccount(int id, string address, double balance, int ownerId, DateTime lastInterestPayment)
+    : base(id, address, balance, ownerId, "SAVINGS")
+    {
+        this.lastInterestPayment = lastInterestPayment;
+    }
+
     private void ApplyInterest()
     {
         TimeSpan timeElapsed = DateTime.Now - lastInterestPayment;

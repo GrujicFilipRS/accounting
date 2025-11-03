@@ -14,6 +14,8 @@ class CheckingAccount : Account
     }
 
     public CheckingAccount(User owner) : base(owner, "CHECKING") { }
+    public CheckingAccount(int id, string address, double balance, int ownerId)
+    : base(id, address, balance, ownerId, "CHECKING") {}
 
     public static void Transfer(
         string sessionId,

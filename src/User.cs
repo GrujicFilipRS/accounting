@@ -4,6 +4,18 @@ class User
 {
     private static List<User> users = new List<User>();
 
+    public static User? GetUserById(int id)
+    {
+        User? foundUser = users.FirstOrDefault(user => user.id == id); // assume there's always a user
+
+        return foundUser;
+    }
+
+    public static void LoadUsers()
+    {
+        users = DatabaseHandler.LoadUsers();
+    }
+
     private static string Hash(string password)
     {
         const int WORK_FACTOR = 8; // Number of iterations of the BCrypt algorithm
@@ -79,9 +91,9 @@ class User
         this.fullName = fullName;
 
         sessionId = Hash(id.ToString());
-        users.Add(this);
     }
 
+    // Creating user from current program
     public User(string username, string password, string fullName)
     {
         try { id = users.Last().id + 1; }
@@ -96,6 +108,8 @@ class User
         hashedPassword = Hash(password);
 
         users.Add(this);
+
+        DatabaseHandler.SaveUser(id, username, hashedPassword, fullName);
     }
 
     private bool ComparePassword(string password)

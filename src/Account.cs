@@ -7,6 +7,11 @@ class Account
 {
     protected static List<Account> accounts = new List<Account>();
 
+    public static void LoadAccounts()
+    {
+        accounts = DatabaseHandler.LoadAccounts();
+    }
+
     protected static string HexHash(int id)
     {
         const int ADDRESS_LENGTH = 24;
@@ -85,6 +90,18 @@ class Account
     protected User owner;
     protected string accountType;
 
+    // Used when loading from db
+    public Account(int id, string address, double balance, int ownerId, string accountType)
+    {
+        this.id = id;
+        this.address = address;
+        this.balance = balance;
+        this.accountType = accountType;
+
+        owner = User.GetUserById(ownerId)!;
+    }
+
+    // Used when creating account
     public Account(User owner, string accountType)
     {
         id = accounts.Count() + 1;
