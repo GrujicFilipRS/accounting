@@ -13,7 +13,11 @@ class CheckingAccount : Account
         return account.address;
     }
 
-    public CheckingAccount(User owner) : base(owner, "CHECKING") { }
+    public CheckingAccount(User owner) : base(owner, "CHECKING")
+    {
+        DatabaseHandler.SaveAccount(id, address, balance, owner.id, "CHECKING", null);
+    }
+    
     public CheckingAccount(int id, string address, double balance, int ownerId)
     : base(id, address, balance, ownerId, "CHECKING") {}
 

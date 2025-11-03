@@ -54,6 +54,24 @@ class DatabaseHandler
         cmd.ExecuteNonQuery();
     }
 
+    public static void SaveAccount(int id, string address, double balance, int ownerId, string accountType, DateTime? lastInterestPayment)
+    {
+        using MySqlConnection connection = new(connectionString);
+        connection.Open();
+
+        string query = "INSERT INTO accounts (id, address, balance, ownerId, accountType, lastInterestPayment) VALUES (@id, @address, @balance, @ownerId, @accountType, @lastInterestPayment)";
+        using MySqlCommand cmd = new(query, connection);
+
+        cmd.Parameters.AddWithValue("@id", id);
+        cmd.Parameters.AddWithValue("@address", address);
+        cmd.Parameters.AddWithValue("@balance", balance);
+        cmd.Parameters.AddWithValue("@ownerId", ownerId);
+        cmd.Parameters.AddWithValue("@accountType", accountType);
+        cmd.Parameters.AddWithValue("@lastInterestPayment", lastInterestPayment);
+
+        cmd.ExecuteNonQuery();
+    }
+
     public static List<User> LoadUsers()
     {
         using MySqlConnection connection = new(connectionString);
@@ -97,7 +115,6 @@ class DatabaseHandler
             double balance = Convert.ToDouble(reader["balance"]);
             int ownerId = Convert.ToInt32(reader["ownerId"]);
             string accountType = reader["accountType"].ToString()!;
-            DateTime lastInterestPayment = Convert.ToDateTime(reader["lastInterestPayment"]);
 
             if (accountType == "CHECKING")
             {
@@ -106,6 +123,7 @@ class DatabaseHandler
             }
             else if (accountType == "SAVINGS")
             {
+                DateTime lastInterestPayment = Convert.ToDateTime(reader["lastInterestPayment"]);
                 SavingsAccount acc = new(id, address, balance, ownerId, lastInterestPayment);
                 accounts.Add(acc);
             }

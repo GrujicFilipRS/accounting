@@ -77,7 +77,7 @@ class User
         return foundUser;
     }
 
-    private int id;
+    public int id;
     private string sessionId; // Used for handling actions taken by user
     private string username, hashedPassword;
     private string fullName;

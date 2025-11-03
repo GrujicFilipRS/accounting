@@ -6,7 +6,7 @@ class Application
 {
     public static void Run()
     {
-        // string acc1Sess = User.Register("fgrujic3", "CofiMafija123", "Filip Grujic");
+        
     }
 
     public static void Setup()
