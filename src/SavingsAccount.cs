@@ -1,112 +1,109 @@
-using System.Reflection;
+namespace Accounting;
 
-namespace Accounting
+class SavingsAccount : Account
 {
-    class SavingsAccount : Account
+    public static string CreateAccount(string sessionId)
     {
-        public static string CreateAccount(string sessionId)
-        {
-            User? user = User.VerifySession(sessionId);
-            if (user is null)
-                throw new Exception("Session invalid");
+        User? user = User.VerifySession(sessionId);
+        if (user is null)
+            throw new Exception("Session invalid");
 
-            SavingsAccount account = new SavingsAccount(user);
+        SavingsAccount account = new SavingsAccount(user);
 
-            return account.address;
-        }
+        return account.address;
+    }
 
-        public static void ApplyInterest(string sessionId, string address)
-        {
-            if (!IsOwner(sessionId, address))
-                throw new Exception("User isn't account owner");
+    public static void ApplyInterest(string sessionId, string address)
+    {
+        if (!IsOwner(sessionId, address))
+            throw new Exception("User isn't account owner");
 
-            Account account = GetAccountByAddress(address)!;
-            if (!(account is SavingsAccount savingsAccount))
-                throw new Exception("Attempted to apply interest to a non-savings account");
+        Account account = GetAccountByAddress(address)!;
+        if (!(account is SavingsAccount savingsAccount))
+            throw new Exception("Attempted to apply interest to a non-savings account");
 
-            savingsAccount.ApplyInterest();
-        }
+        savingsAccount.ApplyInterest();
+    }
 
-        public static void WithdrawToChecking(string sessionId, string address, double amount)
-        {
-            const double MIN_WITHDRAW_TO_CHECKING = 5.0;
+    public static void WithdrawToChecking(string sessionId, string address, double amount)
+    {
+        const double MIN_WITHDRAW_TO_CHECKING = 5.0;
 
-            if (!IsOwner(sessionId, address))
-                throw new Exception("User isn't account owner");
+        if (!IsOwner(sessionId, address))
+            throw new Exception("User isn't account owner");
 
-            Account account = GetAccountByAddress(address)!;
-            if (!(account is SavingsAccount savingsAccount))
-                throw new Exception("Attempted to withdraw to checkings from a non-savings account");
+        Account account = GetAccountByAddress(address)!;
+        if (!(account is SavingsAccount savingsAccount))
+            throw new Exception("Attempted to withdraw to checkings from a non-savings account");
 
-            if (amount < MIN_WITHDRAW_TO_CHECKING)
-                throw new Exception($"The minimum amount to withdraw to checking is {MIN_WITHDRAW_TO_CHECKING}. You submitted {amount}");
+        if (amount < MIN_WITHDRAW_TO_CHECKING)
+            throw new Exception($"The minimum amount to withdraw to checking is {MIN_WITHDRAW_TO_CHECKING}. You submitted {amount}");
 
-            if (amount > savingsAccount.balance)
-                throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than savings account balance");
+        if (amount > savingsAccount.balance)
+            throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than savings account balance");
 
-            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING") && IsOwner(sessionId, acc.address)) as CheckingAccount;
+        CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING") && IsOwner(sessionId, acc.address)) as CheckingAccount;
 
-            if (checkingAccount is null)
-                throw new Exception("User doesn't have checkings account");
+        if (checkingAccount is null)
+            throw new Exception("User doesn't have checkings account");
 
-            string checkingAddr = checkingAccount.address;
+        string checkingAddr = checkingAccount.address;
 
-            Deposit(sessionId, checkingAddr, amount);
-            Withdraw(sessionId, address, amount);
-        }
-        
-        public static void DepositFromChecking(string sessionId, string address, double amount)
-        {
-            const double MIN_DEPOSIT_FROM_CHECKING = 5.0;
+        Deposit(sessionId, checkingAddr, amount);
+        Withdraw(sessionId, address, amount);
+    }
 
-            if (!IsOwner(sessionId, address))
-                throw new Exception("User isn't account owner");
-            
-            Account account = GetAccountByAddress(address)!;
-            if (!(account is SavingsAccount savingsAccount))
-                throw new Exception("Attempted to deposit from checkings to a non-savings account");
+    public static void DepositFromChecking(string sessionId, string address, double amount)
+    {
+        const double MIN_DEPOSIT_FROM_CHECKING = 5.0;
 
-            if (amount < MIN_DEPOSIT_FROM_CHECKING)
-                throw new Exception($"The minimum amount to withdraw to checking is {MIN_DEPOSIT_FROM_CHECKING}. You submitted {amount}");
+        if (!IsOwner(sessionId, address))
+            throw new Exception("User isn't account owner");
 
-            CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING") && IsOwner(sessionId, acc.address)) as CheckingAccount;
+        Account account = GetAccountByAddress(address)!;
+        if (!(account is SavingsAccount savingsAccount))
+            throw new Exception("Attempted to deposit from checkings to a non-savings account");
 
-            if (checkingAccount is null)
-                throw new Exception("User doesn't have checkings account");
-            
-            if (amount > GetBalance(sessionId, address))
-                throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than checking account balance");
+        if (amount < MIN_DEPOSIT_FROM_CHECKING)
+            throw new Exception($"The minimum amount to withdraw to checking is {MIN_DEPOSIT_FROM_CHECKING}. You submitted {amount}");
 
-            string checkingAddr = checkingAccount.address;
+        CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING") && IsOwner(sessionId, acc.address)) as CheckingAccount;
 
-            Withdraw(sessionId, checkingAddr, amount);
-            Deposit(sessionId, address, amount);
-        }
+        if (checkingAccount is null)
+            throw new Exception("User doesn't have checkings account");
 
-        private const double INTEREST_PERCENTAGE = 5; // per minute, for testing purposes
-        private DateTime lastInterestPayment;
+        if (amount > GetBalance(sessionId, address))
+            throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than checking account balance");
 
-        public SavingsAccount(User owner) : base(owner, "SAVINGS")
-        {
-            lastInterestPayment = DateTime.Now;
-        }
+        string checkingAddr = checkingAccount.address;
 
-        private void ApplyInterest()
-        {
-            TimeSpan timeElapsed = DateTime.Now - lastInterestPayment;
-            double minutesPassed = timeElapsed.TotalMinutes;
-            Console.WriteLine(minutesPassed);
+        Withdraw(sessionId, checkingAddr, amount);
+        Deposit(sessionId, address, amount);
+    }
 
-            if (minutesPassed < 1)
-                return;
+    private const double INTEREST_PERCENTAGE = 5; // per minute, for testing purposes
+    private DateTime lastInterestPayment;
 
-            const double RATE = INTEREST_PERCENTAGE / 100.0;
+    public SavingsAccount(User owner) : base(owner, "SAVINGS")
+    {
+        lastInterestPayment = DateTime.Now;
+    }
 
-            double multiplier = Math.Pow(1 + RATE, Math.Floor(minutesPassed));
+    private void ApplyInterest()
+    {
+        TimeSpan timeElapsed = DateTime.Now - lastInterestPayment;
+        double minutesPassed = timeElapsed.TotalMinutes;
+        Console.WriteLine(minutesPassed);
 
-            balance *= multiplier;
+        if (minutesPassed < 1)
+            return;
 
-            lastInterestPayment = lastInterestPayment.AddHours(Math.Floor(minutesPassed));
-        }
+        const double RATE = INTEREST_PERCENTAGE / 100.0;
+
+        double multiplier = Math.Pow(1 + RATE, Math.Floor(minutesPassed));
+
+        balance *= multiplier;
+
+        lastInterestPayment = lastInterestPayment.AddHours(Math.Floor(minutesPassed));
     }
 }

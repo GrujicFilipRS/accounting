@@ -1,8 +1,8 @@
-namespace Accounting
+namespace Accounting;
+
+public static class CurrencyFormatter
 {
-    public static class CurrencyFormatter
-    {
-        private static readonly Dictionary<string, string> CurrencySymbols = new()
+    private static readonly Dictionary<string, string> CurrencySymbols = new()
         {
             { "USD", "$" },
             { "EUR", "€" },
@@ -13,16 +13,15 @@ namespace Accounting
             { "AUD", "A$" }
         };
 
-        public static string Format(double amount, string currency)
+    public static string Format(double amount, string currency)
+    {
+        currency = currency.ToUpperInvariant();
+
+        if (CurrencySymbols.TryGetValue(currency, out string? symbol))
         {
-            currency = currency.ToUpperInvariant();
-
-            if (CurrencySymbols.TryGetValue(currency, out string? symbol))
-            {
-                return $"{symbol!}{amount:N2}";
-            }
-
-            return $"{amount:N2} {currency}";
+            return $"{symbol!}{amount:N2}";
         }
+
+        return $"{amount:N2} {currency}";
     }
 }

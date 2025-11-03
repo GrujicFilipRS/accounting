@@ -1,11 +1,10 @@
-﻿namespace Accounting
+﻿namespace Accounting;
+
+class Entrypoint
 {
-    class Entrypoint
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            Application.Setup();
-            Application.Run();
-        }
+        Application.Setup();
+        Application.Run();
     }
 }
