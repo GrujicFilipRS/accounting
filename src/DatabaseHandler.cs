@@ -8,6 +8,7 @@ class DatabaseHandler
     private static string? DB_NAME;
     private static string? DB_USERNAME;
     private static string? DB_PASSWORD;
+    private static string? DB_PORT;
 
     private static string? connectionString;
 
@@ -17,8 +18,9 @@ class DatabaseHandler
         DB_NAME = Environment.GetEnvironmentVariable("DB_NAME");
         DB_USERNAME = Environment.GetEnvironmentVariable("DB_USERNAME");
         DB_PASSWORD = Environment.GetEnvironmentVariable("DB_PASSWORD");
+        DB_PORT = Environment.GetEnvironmentVariable("DB_PORT");
 
-        connectionString = $"Server={DB_SERVER};Database={DB_NAME};User ID={DB_USERNAME};Password={DB_PASSWORD};SslMode=Disabled;";
+        connectionString = $"Server={DB_SERVER};Port={DB_PORT};Database={DB_NAME};User ID={DB_USERNAME};Password={DB_PASSWORD};SslMode=Disabled;";
     }
 
     public static bool VerifyConnection()
