@@ -156,5 +156,7 @@ class DatabaseHandler
         using MySqlCommand cmd = new(query, connection);
         cmd.Parameters.AddWithValue("@address", address);
         cmd.Parameters.AddWithValue("@balance", balance);
+
+        cmd.ExecuteNonQuery();
     }
 }
