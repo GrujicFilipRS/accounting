@@ -150,6 +150,8 @@ class Account
             throw new Exception("Invalid deposit amount");
 
         balance += amount;
+
+        DatabaseHandler.ChangeBalance(address, balance);
     }
 
     private void Withdraw(string sessionId, double amount)
@@ -164,5 +166,7 @@ class Account
             throw new Exception("Invalid withdraw amount");
 
         balance -= amount;
+
+        DatabaseHandler.ChangeBalance(address, balance);
     }
 }
