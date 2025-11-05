@@ -22,9 +22,28 @@ class CheckingAccount : Account
     {
         DatabaseHandler.SaveAccount(id, address, balance, owner.id, "CHECKING", null);
     }
-    
+
     public CheckingAccount(int id, string address, double balance, int ownerId)
-    : base(id, address, balance, ownerId, "CHECKING") {}
+    : base(id, address, balance, ownerId, "CHECKING") { }
+
+    public static string? GetAccountBySession(string session)
+    {
+        CheckingAccount? account = accounts.FirstOrDefault(
+            acc => IsOwner(session, acc.address)
+            && IsType(acc.address, "CHECKING")
+        ) as CheckingAccount;
+
+        if (account is null) return null;
+        return account.address;
+    }
+
+    public static bool CheckIfUserHasAccount(string session)
+    {
+        return accounts.FirstOrDefault(
+            acc => IsOwner(session, acc.address)
+            && IsType(acc.address, "CHECKING")
+        ) is not null;
+    }
 
     public static void Transfer(
         string sessionId,

@@ -86,6 +86,25 @@ class SavingsAccount : Account
         Deposit(sessionId, address, amount);
     }
 
+    public static string? GetAccountBySession(string session)
+    {
+        SavingsAccount? account = accounts.FirstOrDefault(
+            acc => IsOwner(session, acc.address)
+            && IsType(acc.address, "SAVINGS")
+        ) as SavingsAccount;
+
+        if (account is null) return null;
+        return account.address;
+    }
+
+    public static bool CheckIfUserHasAccount(string session)
+    {
+        return accounts.FirstOrDefault(
+            acc => IsOwner(session, acc.address)
+            && IsType(acc.address, "SAVINGS")
+        ) is not null;
+    }
+
     private const double INTEREST_PERCENTAGE = 5; // per minute, for testing purposes
     private DateTime lastInterestPayment;
 
