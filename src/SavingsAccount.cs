@@ -7,6 +7,11 @@ class SavingsAccount : Account
         User? user = User.VerifySession(sessionId);
         if (user is null)
             throw new Exception("Session invalid");
+        
+        if (accounts.Any(acc =>
+            IsOwner(sessionId, acc.address) &&
+            IsType(acc.address, "CHECKING")))
+            throw new Exception("User already has savings account");
 
         SavingsAccount account = new SavingsAccount(user);
 
