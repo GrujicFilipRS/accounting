@@ -135,7 +135,7 @@ class Application
                 accountSelected = Console.ReadLine();
 
                 if (accountSelected == "C") checkingAddr = CheckingAccount.CreateAccount(session!);
-                if (accountSelected == "S") checkingAddr = SavingsAccount.CreateAccount(session!);
+                if (accountSelected == "S") savingsAddr = SavingsAccount.CreateAccount(session!);
                 Console.WriteLine($"Unknown account type: {accountSelected}");
                 return true;
 
