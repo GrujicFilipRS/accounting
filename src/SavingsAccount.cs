@@ -10,7 +10,7 @@ class SavingsAccount : Account
         
         if (accounts.Any(acc =>
             IsOwner(sessionId, acc.address) &&
-            IsType(acc.address, "CHECKING")))
+            IsType(acc.address, "SAVINGS")))
             throw new Exception("User already has savings account");
 
         SavingsAccount account = new SavingsAccount(user);
