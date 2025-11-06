@@ -69,7 +69,7 @@ class SavingsAccount : Account
         if (!(account is SavingsAccount savingsAccount))
             throw new Exception("Attempted to deposit from checkings to a non-savings account");
 
-        if (amount > MIN_DEPOSIT_FROM_CHECKING)
+        if (amount < MIN_DEPOSIT_FROM_CHECKING)
             throw new Exception($"The minimum amount to withdraw to checking is {MIN_DEPOSIT_FROM_CHECKING}. You submitted {amount}");
 
         CheckingAccount? checkingAccount = accounts.SingleOrDefault(acc => acc.IsType("CHECKING") && IsOwner(sessionId, acc.address)) as CheckingAccount;
@@ -77,7 +77,7 @@ class SavingsAccount : Account
         if (checkingAccount is null)
             throw new Exception("User doesn't have checkings account");
 
-        if (amount > GetBalance(sessionId, address))
+        if (amount > GetBalance(sessionId, checkingAccount.address))
             throw new Exception($"The amount to withdraw {CurrencyFormatter.Format(amount, currency)} is greater than checking account balance");
 
         string checkingAddr = checkingAccount.address;
