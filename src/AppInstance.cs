@@ -126,6 +126,7 @@ class Application
 
                 string addrSelected = accountSelected == "C" ? checkingAddr! : savingsAddr!;
                 Console.WriteLine(Account.GetBalanceFormatted(session!, addrSelected));
+                Console.WriteLine($"On account with address: {addrSelected}");
                 break;
 
             case "2":
