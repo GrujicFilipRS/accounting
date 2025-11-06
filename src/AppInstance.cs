@@ -109,7 +109,7 @@ class Application
         switch (actionMode)
         {
             case "1":
-                Console.WriteLine("Checking (C) or Savings (S) account?");
+                Console.Write("Checking (C) or Savings (S) account?\n> ");
                 string? accountSelected = Console.ReadLine();
                 if (accountSelected != "C" && accountSelected != "S")
                 {
@@ -130,41 +130,41 @@ class Application
 
             case "2":
                 Console.WriteLine("Choose account type");
-                Console.Write("Checking (C) or Savings (S) account?\n >");
+                Console.Write("Checking (C) or Savings (S) account?\n> ");
 
                 accountSelected = Console.ReadLine();
 
                 if (accountSelected == "C") checkingAddr = CheckingAccount.CreateAccount(session!);
                 if (accountSelected == "S") savingsAddr = SavingsAccount.CreateAccount(session!);
-                Console.WriteLine($"Unknown account type: {accountSelected}");
+                else Console.WriteLine($"Unknown account type: {accountSelected}");
                 return true;
 
             case "3":
-                Console.Write("Choose amount (EUR)\n >");
+                Console.Write("Choose amount (EUR)\n> ");
                 double amount = double.Parse(Console.ReadLine()!);
 
                 SavingsAccount.DepositFromChecking(session!, savingsAddr!, amount);
                 return true;
 
             case "4":
-                Console.Write("Choose amount (EUR)\n >");
+                Console.Write("Choose amount (EUR)\n> ");
                 amount = double.Parse(Console.ReadLine()!);
 
                 SavingsAccount.WithdrawToChecking(session!, savingsAddr!, amount);
                 return true;
 
             case "5":
-                Console.Write("Enter address\n >");
+                Console.Write("Enter address\n> ");
                 string addr = Console.ReadLine()!;
 
-                Console.Write("Choose amount (EUR)\n >");
+                Console.Write("Choose amount (EUR)\n> ");
                 amount = double.Parse(Console.ReadLine()!);
 
                 CheckingAccount.Transfer(session!, checkingAddr!, addr, amount);
                 return true;
 
             case "6":
-                Console.WriteLine("Checking (C) or Savings (S) account?");
+                Console.Write("Checking (C) or Savings (S) account?\n> ");
                 accountSelected = Console.ReadLine();
                 if (accountSelected == "C")
                     Console.WriteLine(Account.GetBalanceFormatted(session!, checkingAddr!));
