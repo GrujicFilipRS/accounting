@@ -1,25 +1,38 @@
-# Accounting
+# Bankarski sistem
 
-## General info
+### Opis
 
-This is a very simple console application, that will communicate with a database.
-There will be essentially only two tables:
-- the user table
-- the account table
+Ovo je projekat obavljen za čas objektno-orijentisanog programiranja
 
-For now I'm speculating on using NeonDB for the database hosting, but we'll see where the future takes us
+Program omogućava korisniku da napravi i da se uloguje u svoj nalog, i da napravi dva računa, Checking i Savings
 
-When starting the program, the user can choose between logging in and registering
-When logged in, he can either create one of two types of  accounts:
-- Checkings account
-- Savings account
+Checking račun dozvoljava korisniku da prima i šalje novčane transfere sa računa drugih korisnika, dok Savings račun dozvoljava primanje kamate (kamata je trenutno postavljena na 5% po minuti, radi testiranja)
 
-Both of these will be implemented with classes in C#, and both of those classes will inherit from a higher abstract class `Account`
+Sve informacije o nalozima i računima se čuvaju u MySql bazi podataka
 
-Then he will be able to use both of these accounts like a regular bank account
 
-## How to build and run
+### .ENV file
 
-You're going to need dotnet (this one is configured for version 9)
+Za rad programa i povezivanje s bazom podataka, u glavnom folderu je potreban `.env` file
 
-You just clone the repository, and do `dotnet build` and then `dotnet run` to run the project
+`.env` treba da bude sačuvan u sledećem formatu:
+
+```dotenv
+DB_SERVER="Server na kojem je hostovana BP"
+DB_NAME="Ime BP"
+DB_USERNAME="Korisničko ime s pristupom k BP"
+DB_PASSWORD="Lozinka korisnika s pristupom k BP"
+DB_PORT="Port na kojoj je hostovana BP"
+```
+
+
+### Potrebni programi
+
+Za rad programa potreban je dotnet, verzija 7.0 ili 9.0
+
+Ostale potrebštine mogu se automatski instalirati komandom `dotnet build`
+
+
+### Pokretanje programa
+
+Pokretanje programa se radi komandom `dotnet run`
