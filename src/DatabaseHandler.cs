@@ -20,7 +20,7 @@ class DatabaseHandler
         DB_PASSWORD = Environment.GetEnvironmentVariable("DB_PASSWORD");
         DB_PORT = Environment.GetEnvironmentVariable("DB_PORT");
 
-        connectionString = $"Server={DB_SERVER};Port={DB_PORT};Database={DB_NAME};User ID={DB_USERNAME};Password={DB_PASSWORD};SslMode=Disabled;";
+        connectionString = $"Server={DB_SERVER};Port={DB_PORT};Database={DB_NAME};User ID={DB_USERNAME};Password={DB_PASSWORD};SslMode=Preferred;AllowPublicKeyRetrieval=True;";
     }
 
     public static bool VerifyConnection()
